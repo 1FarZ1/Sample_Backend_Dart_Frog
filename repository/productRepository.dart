@@ -50,11 +50,29 @@ class ProductRepository {
   Future<List<Product>> fetchProducts({
     int? page = 0,
     int? limit = 2,
-    // String? search,
+    String? search,
     // String? sort,
     // String? order,
   }) async {
-    return _products.skip(page! * limit!).take(limit).toList();
+    final resultProducts = <Product>[];
+    if (search != null) {
+      for (final p in _products) {
+        if (p.description.toLowerCase().contains(search.toLowerCase()) ||
+            p.name.toLowerCase().contains(search.toLowerCase())) {
+          resultProducts.add(p);
+        }
+        
+      }
+    }
+    print(resultProducts);
+
+    final startIndex = page! * limit!;
+    final endIndex = startIndex + limit;
+
+    return resultProducts.sublist(
+      startIndex,
+      endIndex > resultProducts.length ? resultProducts.length : endIndex,
+    );
   }
 
   Future<Product?> fetchProductById(int id) async {

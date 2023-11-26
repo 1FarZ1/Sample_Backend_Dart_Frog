@@ -22,6 +22,7 @@ Future<Response> _get(RequestContext context) async {
         page: int.tryParse(context.request.uri.queryParameters['page'] ?? '0'),
         limit:
             int.tryParse(context.request.uri.queryParameters['limit'] ?? '2'),
+        search: context.request.uri.queryParameters['search'],
       );
   return Response.json(
     body: products,
