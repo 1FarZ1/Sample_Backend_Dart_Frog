@@ -14,3 +14,5 @@ build/
 
 # Test related files
 coverage/
+.vscode/extensions.json
+.vscode/
