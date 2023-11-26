@@ -1,4 +1,5 @@
 import 'package:dart_frog/dart_frog.dart';
+import 'package:server/repository/authRepository.dart';
 
 class SignInBody {
   SignInBody({required this.email, required this.password});
@@ -20,9 +21,20 @@ Future<Response> onRequest(RequestContext context) async {
   if (context.request.method != HttpMethod.post) {
     return Response(body: 'This is a Login route!');
   }
-  
+
+  final authRepo = context.read<AuthRepository>();
 
   final body = await context.request.json() as Map<String, dynamic>;
-  return Response.json(body: SignInBody.fromJson(body));
+
+  final signInBody = SignInBody.fromJson(body);
+
+  final token = await authRepo.login(signInBody.email, signInBody.password);
+  if (token == null) {
+    return Response(body: 'Invalid credentials', statusCode: 401);
+  }
+
+  return Response.json(body: token);
+
+  // return Response.json(body: SignInBody.fromJson(body));
   // return Response(body: 'This is a Login route!');
 }
