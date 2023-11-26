@@ -51,8 +51,6 @@ class ProductRepository {
     int? page = 0,
     int? limit = 2,
     String? search,
-    // String? sort,
-    // String? order,
   }) async {
     final resultProducts = <Product>[];
     if (search != null) {
@@ -64,8 +62,9 @@ class ProductRepository {
         
       }
     }
-    print(resultProducts);
-
+    else{
+      resultProducts.addAll(_products);
+    }
     final startIndex = page! * limit!;
     final endIndex = startIndex + limit;
 
