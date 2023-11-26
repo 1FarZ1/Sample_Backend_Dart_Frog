@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs
+
 import '../models/product.dart';
+
 class ProductRepository {
   factory ProductRepository() {
     return _instance;
@@ -11,7 +14,7 @@ class ProductRepository {
 
   //singleton
 
-  final List<Product> products = [
+  final List<Product> _products = [
     Product(
       id: 1,
       name: 'Product 1',
@@ -44,32 +47,37 @@ class ProductRepository {
     ),
   ];
 
-  Future<List<Product>> fetchProducts() async {
-    return products;
+  Future<List<Product>> fetchProducts({
+    int? page = 0,
+    int? limit = 2,
+    // String? search,
+    // String? sort,
+    // String? order,
+  }) async {
+    return _products.skip(page! * limit!).take(limit).toList();
   }
 
   Future<Product?> fetchProductById(int id) async {
-    return products.firstWhere((p) => p.id == id);
+    return _products.firstWhere((p) => p.id == id);
   }
 
   Future<Product> createProduct(Product product) async {
-    products.add(product);
+    _products.add(product);
 
     return product;
   }
 
   Future<Product?> updateProduct(Product product) async {
-
-    final index = products.indexWhere((p) => p.id == product.id);
-    if(index == -1) {
+    final index = _products.indexWhere((p) => p.id == product.id);
+    if (index == -1) {
       return null;
     }
-    products[index] = product;
+    _products[index] = product;
     return product;
   }
 
   Future<bool> deleteProduct(int id) async {
-    products.removeWhere((p) => p.id == id);
+    _products.removeWhere((p) => p.id == id);
     return true;
   }
 }

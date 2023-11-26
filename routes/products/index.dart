@@ -1,10 +1,9 @@
 import 'package:dart_frog/dart_frog.dart';
 
-import '../../models/product.dart';
-import '../../repository/productRepository.dart';
+import '../../../server/models/product.dart';
+import '../../../server/repository/productRepository.dart';
 
 Future<Response> onRequest(RequestContext context) async {
-  // print(context.read<ProductRepository>().products);
   switch (context.request.method) {
     case HttpMethod.get:
       return _get(context);
@@ -19,7 +18,11 @@ Future<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _get(RequestContext context) async {
-  final products = await context.read<ProductRepository>().fetchProducts();
+  final products = await context.read<ProductRepository>().fetchProducts(
+        page: int.tryParse(context.request.uri.queryParameters['page'] ?? '0'),
+        limit:
+            int.tryParse(context.request.uri.queryParameters['limit'] ?? '2'),
+      );
   return Response.json(
     body: products,
   );

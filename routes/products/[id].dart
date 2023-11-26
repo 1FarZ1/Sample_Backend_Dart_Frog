@@ -1,7 +1,7 @@
 import 'package:dart_frog/dart_frog.dart';
 
-import '../../models/product.dart';
-import '../../repository/productRepository.dart';
+import '../../../server/models/product.dart';
+import '../../../server/repository/productRepository.dart';
 
 Future<Response> onRequest(
   RequestContext context,
