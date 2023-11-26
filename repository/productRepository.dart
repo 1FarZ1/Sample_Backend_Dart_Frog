@@ -82,7 +82,7 @@ class ProductRepository {
     return products;
   }
 
-  Future<Product> fetchProductById(int id) async {
+  Future<Product?> fetchProductById(int id) async {
     return products.firstWhere((p) => p.id == id);
   }
 
@@ -92,13 +92,18 @@ class ProductRepository {
     return product;
   }
 
-  Future<Product> updateProduct(Product product) async {
+  Future<Product?> updateProduct(Product product) async {
+
     final index = products.indexWhere((p) => p.id == product.id);
+    if(index == -1) {
+      return null;
+    }
     products[index] = product;
     return product;
   }
 
-  Future<void> deleteProduct(int id) async {
+  Future<bool> deleteProduct(int id) async {
     products.removeWhere((p) => p.id == id);
+    return true;
   }
 }
