@@ -17,12 +17,11 @@ class SignInBody {
 }
 
 Future<Response> onRequest(RequestContext context) async {
-  // if reequest not post return
   if (context.request.method != HttpMethod.post) {
     return Response(body: 'This is a Login route!');
   }
+  
 
-  // get body from request
   final body = await context.request.json() as Map<String, dynamic>;
   return Response.json(body: SignInBody.fromJson(body));
   // return Response(body: 'This is a Login route!');
