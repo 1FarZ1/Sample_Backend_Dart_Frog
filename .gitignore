@@ -21,3 +21,5 @@ coverage/
 # Files and directories created by IntelliJ IDEA
 .vscode/extensions.json
 .vscode/
+
+.env
