@@ -1,8 +1,7 @@
 import 'package:dart_frog/dart_frog.dart';
 
-import '../../../server/models/product.dart';
-import '../../../server/repository/productRepository.dart';
-
+import 'package:server/models/product.dart';
+import 'package:server/repository/productRepository.dart';
 Future<Response> onRequest(RequestContext context) async {
   switch (context.request.method) {
     case HttpMethod.get:
