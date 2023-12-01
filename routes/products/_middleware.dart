@@ -10,9 +10,3 @@ Handler middleware(Handler handler) {
   );
   // return handler;
 }
-
-  // return DatabaseClient(
-      //   // dbUrl: Platform.environment['DB_URL'],
-      //   // dbUser: Platform.environment['DB_USER'],
-      //   // dbPassword: Platform.environment['DB_PASSWORD'],
-      // );
