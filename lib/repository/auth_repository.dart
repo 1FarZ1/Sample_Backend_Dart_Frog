@@ -1,5 +1,3 @@
-// do singleton and add 1 methode for login and 1 for register only
-
 // ignore_for_file: public_member_api_docs
 
 import 'dart:convert';
@@ -8,15 +6,6 @@ import 'package:crypto/crypto.dart';
 import 'package:server/db/sql_client.dart';
 
 import 'package:server/models/user.dart';
-
-// final _users = [
-//   User(email: 'f_bekkouche@estin.dz', password: 'mrfares77'),
-//   User(email: 'f_bekkouche1@estin.dz', password: 'mrfares77'),
-//   User(email: 'f_bekkouche2@estin.dz', password: 'mrfares77'),
-//   User(email: 'f_bekkouche3@estin.dz', password: 'mrfares77'),
-//   User(email: 'f_bekkouche4@estin.dz', password: 'mrfares77'),
-//   User(email: 'f_bekkouche5@estin.dz', password: 'mrfares77'),
-// ];
 
 class AuthRepository {
   factory AuthRepository() {
@@ -84,6 +73,7 @@ class AuthRepository {
         'image': image,
       },
     );
+    
     return true;
   }
 }

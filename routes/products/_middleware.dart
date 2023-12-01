@@ -1,5 +1,6 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_auth/dart_frog_auth.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:server/models/user.dart';
 import 'package:server/repository/product_repository.dart';
 import 'package:server/repository/user_repository.dart';

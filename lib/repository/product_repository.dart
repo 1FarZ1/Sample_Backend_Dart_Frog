@@ -60,8 +60,8 @@ class ProductRepository {
   }) async {
     final resultProducts = <Product>[];
 
-    final result =  await sqlClient.execute('SELECT * FROM products');
-    print(result);
+    final result = await sqlClient.execute('SELECT * FROM product');
+   
     if (search != null) {
       for (final p in _products) {
         if (p.description.toLowerCase().contains(search.toLowerCase()) ||
