@@ -44,24 +44,3 @@ class UserRepository {
     );
   }
 }
-
-User? verifyToken(String token) {
-  try {
-    final payload = JWT.verify(
-      token,
-      SecretKey('123'),
-    );
-
-    final payloadData = payload.payload as Map<String, dynamic>;
-
-    final username = payloadData['username'] as String;
-    return User(
-      email: username,
-      password: 'f',
-      name: 'f',
-      image: 'f',
-    );
-  } catch (e) {
-    return null;
-  }
-}

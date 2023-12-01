@@ -20,39 +20,6 @@ class ProductRepository {
 
   //singleton
 
-  final List<Product> _products = [
-    Product(
-      id: 1,
-      name: 'Product 1',
-      description: 'This is product 1',
-      price: 100,
-    ),
-    Product(
-      id: 2,
-      name: 'Product 2',
-      description: 'This is product 2',
-      price: 200,
-    ),
-    Product(
-      id: 3,
-      name: 'Product 3',
-      description: 'This is product 3',
-      price: 300,
-    ),
-    Product(
-      id: 4,
-      name: 'Product 4',
-      description: 'This is product 4',
-      price: 400,
-    ),
-    Product(
-      id: 5,
-      name: 'Product 5',
-      description: 'This is product 5',
-      price: 500,
-    ),
-  ];
-
   Future<List<Product>> fetchProducts({
     int? page = 0,
     int? limit = 2,
@@ -61,16 +28,18 @@ class ProductRepository {
     final resultProducts = <Product>[];
 
     final result = await sqlClient.execute('SELECT * FROM product');
-   
+
+    final products =
+        result.rows.map((e) => Product.fromAssoc(e.assoc())).toList();
     if (search != null) {
-      for (final p in _products) {
+      for (final p in products) {
         if (p.description.toLowerCase().contains(search.toLowerCase()) ||
             p.name.toLowerCase().contains(search.toLowerCase())) {
           resultProducts.add(p);
         }
       }
     } else {
-      resultProducts.addAll(_products);
+      resultProducts.addAll(products);
     }
 
     final startIndex = page! * limit!;
@@ -83,26 +52,49 @@ class ProductRepository {
   }
 
   Future<Product?> fetchProductById(int id) async {
-    return _products.firstWhere((p) => p.id == id);
+    final result = await sqlClient.execute(
+      'SELECT * FROM product WHERE id = :id',
+      params: {
+        'id': id,
+      },
+    );
+    if (result.rows.isEmpty) return null;
+    return Product.fromAssoc(result.rows.first.assoc());
   }
 
   Future<Product> createProduct(Product product) async {
-    _products.add(product);
-
     return product;
   }
 
   Future<Product?> updateProduct(Product product) async {
-    final index = _products.indexWhere((p) => p.id == product.id);
-    if (index == -1) {
-      return null;
-    }
-    _products[index] = product;
-    return product;
+    // final index = _products.indexWhere((p) => p.id == product.id);
+    // if (index == -1) {
+    //   return null;
+    // }
+    // _products[index] = product;
+    // return product;
+
+    final result = await sqlClient.execute(
+      'UPDATE product SET name = :name, description = :description, price = :price, image = :image WHERE id = :id',
+      params: {
+        'id': product.id,
+        'name': product.name,
+        'description': product.description,
+        'price': product.price,
+        'image': product.image,
+      },
+    );
+    return null;
   }
 
   Future<bool> deleteProduct(int id) async {
-    _products.removeWhere((p) => p.id == id);
-    return true;
+    // _products.removeWhere((p) => p.id == id);
+
+    return sqlClient.execute(
+      'DELETE FROM product WHERE id = :id',
+      params: {
+        'id': id,
+      },
+    ).then((value) => value.numOfRows > 0);
   }
 }
