@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_frog/dart_frog.dart';
 import 'package:server/repository/authRepository.dart';
 
@@ -18,23 +20,30 @@ class SignInBody {
 }
 
 Future<Response> onRequest(RequestContext context) async {
-  if (context.request.method != HttpMethod.post) {
-    return Response(body: 'This is a Login route!');
-  }
-
+  return switch (context.request.method) {
+    HttpMethod.post => _onPost(context),
+    _ => Future.value(Response(statusCode: HttpStatus.methodNotAllowed)),
+  };
+}
+Future<Response> _onPost(
+  RequestContext context,
+) async {
   final authRepo = context.read<AuthRepository>();
-
   final body = await context.request.json() as Map<String, dynamic>;
-
   final signInBody = SignInBody.fromJson(body);
   if (signInBody.email.isEmpty || signInBody.password.isEmpty) {
-    return Response(body: 'Please Provide All fields', statusCode: 401);
+    return Response(
+      body: 'Please Provide All fields',
+      statusCode: HttpStatus.badRequest,
+    );
   }
-  late final String? token;
-  token = await authRepo.login(signInBody.email, signInBody.password);
 
+  final token = await authRepo.login(signInBody.email, signInBody.password);
   if (token == null) {
-    return Response(body: 'Invalid credentials', statusCode: 401);
+    return Response(
+      body: 'Invalid credentials',
+      statusCode: HttpStatus.badRequest,
+    );
   }
 
   return Response.json(
@@ -44,7 +53,4 @@ Future<Response> onRequest(RequestContext context) async {
       'token': token,
     },
   );
-
-  // return Response.json(body: SignInBody.fromJson(body));
-  // return Response(body: 'This is a Login route!');
 }

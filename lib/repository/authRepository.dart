@@ -7,40 +7,14 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:server/repository/sql_client.dart';
 
-class User {
-  User({required this.email, required this.password});
-
-  User.fromAssoc(Map<String, dynamic> assoc)
-      : email = assoc['email'] as String,
-        password = assoc['password'] as String;
-
-  // constructor from json
-  User.fromJson(Map<String, dynamic> json)
-      : email = json['email'] as String,
-        password = json['password'] as String;
-  String email;
-  String password;
-
-  Map<String, dynamic> toJson() => {
-        'email': email,
-        'password': password,
-      };
-
-  Map<String, dynamic> toAssoc() => {
-        'email': email,
-        'password': password,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is User && other.email == email && other.password == password;
-  }
-
-  @override
-  int get hashCode => email.hashCode ^ password.hashCode;
-}
+// final _users = [
+//   User(email: 'f_bekkouche@estin.dz', password: 'mrfares77'),
+//   User(email: 'f_bekkouche1@estin.dz', password: 'mrfares77'),
+//   User(email: 'f_bekkouche2@estin.dz', password: 'mrfares77'),
+//   User(email: 'f_bekkouche3@estin.dz', password: 'mrfares77'),
+//   User(email: 'f_bekkouche4@estin.dz', password: 'mrfares77'),
+//   User(email: 'f_bekkouche5@estin.dz', password: 'mrfares77'),
+// ];
 
 class AuthRepository {
   factory AuthRepository() {
@@ -53,19 +27,14 @@ class AuthRepository {
 
   SqlClient sqlClient;
 
-  // final _users = [
-  //   User(email: 'f_bekkouche@estin.dz', password: 'mrfares77'),
-  //   User(email: 'f_bekkouche1@estin.dz', password: 'mrfares77'),
-  //   User(email: 'f_bekkouche2@estin.dz', password: 'mrfares77'),
-  //   User(email: 'f_bekkouche3@estin.dz', password: 'mrfares77'),
-  //   User(email: 'f_bekkouche4@estin.dz', password: 'mrfares77'),
-  //   User(email: 'f_bekkouche5@estin.dz', password: 'mrfares77'),
-  // ];
   static final AuthRepository _instance = AuthRepository._privateConstructor(
     sqlClient: SqlClient(),
   );
+
   Future<String?> login(String email, String password) async {
 
+
+    
     final result = await sqlClient.execute(
       'SELECT * FROM users WHERE email = :email AND password = :password',
       params: {
@@ -73,6 +42,9 @@ class AuthRepository {
         'password': password,
       },
     );
+
+    //
+
     if (result.rows.isEmpty) return null;
 
     return 'token';
@@ -84,13 +56,12 @@ class AuthRepository {
     String name, {
     String? image,
   }) async {
-
     final bytes = utf8.encode(password);
     final digest = sha256.convert(bytes);
 
     final result = await sqlClient.execute(
       'INSERT INTO users (email, password, name, image) VALUES (:email, :password, :name, :image)',
-      params: {
+      params: { 
         'email': email,
         'password': digest.toString(),
         'name': name,
@@ -98,7 +69,6 @@ class AuthRepository {
       },
     );
     // if (result.rows.isEmpty) return false;
-
 
     // _users.add(User(email: email, password: password));
     return true;

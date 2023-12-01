@@ -1,7 +1,7 @@
+import 'dart:io';
+
 import 'package:dart_frog/dart_frog.dart';
 import 'package:server/repository/authRepository.dart';
-
-import 'login.dart';
 
 class SignUpBody {
   SignUpBody({
@@ -31,17 +31,25 @@ class SignUpBody {
 }
 
 Future<Response> onRequest(RequestContext context) async {
-  if (context.request.method != HttpMethod.post) {
-    return Response(body: 'This is a Register route!');
-  }
+  return switch (context.request.method) {
+    HttpMethod.post => _onPost(context),
+    _ => Future.value(Response(statusCode: HttpStatus.methodNotAllowed)),
+  };
+}
 
-  final authRepo = context.read<AuthRepository>();
+Future<Response> _onPost(
+  RequestContext context,
+) async {
+   final authRepo = context.read<AuthRepository>();
   final body = await context.request.json() as Map<String, dynamic>;
   final signUpBody = SignUpBody.fromJson(body);
   if (signUpBody.email.isEmpty ||
       signUpBody.password.isEmpty ||
       signUpBody.name.isEmpty) {
-    return Response(body: 'Please Provide All fields', statusCode: 401);
+    return Response(
+      body: 'Please Provide All fields',
+      statusCode: HttpStatus.badRequest,
+    );
   }
 
   final isRegistered = await authRepo.register(
@@ -51,15 +59,17 @@ Future<Response> onRequest(RequestContext context) async {
     image: signUpBody.image ?? '',
   );
   if (!isRegistered) {
-    return Response(body: 'Invalid credentials', statusCode: 401);
+    return Response(
+      body: 'Invalid credentials',
+      statusCode: HttpStatus.badRequest,
+    );
   }
 
-  // login user
   final token = await authRepo.login(signUpBody.email, signUpBody.password);
   return Response.json(
     body: {
       'message': 'User Registered successfully',
-      'status': 201,
+      'status': HttpStatus.created,
       'token': token,
     },
   );
