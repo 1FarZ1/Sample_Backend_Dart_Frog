@@ -1,19 +1,16 @@
+import 'dart:io';
+
 import 'package:dart_frog/dart_frog.dart';
 
 import 'package:server/models/product.dart';
 import 'package:server/repository/productRepository.dart';
+
 Future<Response> onRequest(RequestContext context) async {
-  switch (context.request.method) {
-    case HttpMethod.get:
-      return _get(context);
-    case HttpMethod.post:
-      return _post(context);
-    default:
-      return Response(
-        statusCode: 405,
-        body: 'Method not allowed',
-      );
-  }
+  return switch (context.request.method) {
+    HttpMethod.get => _get(context),
+    HttpMethod.post => _post(context),
+    _ => Future.value(Response(statusCode: HttpStatus.methodNotAllowed)),
+  };
 }
 
 Future<Response> _get(RequestContext context) async {
@@ -24,7 +21,11 @@ Future<Response> _get(RequestContext context) async {
         search: context.request.uri.queryParameters['search'],
       );
   return Response.json(
-    body: products,
+    body: {
+      'message': 'Products fetched successfully',
+      'status': HttpStatus.ok,
+      'products': products,
+    },
   );
 }
 
@@ -38,6 +39,7 @@ Future<Response> _post(RequestContext context) async {
     body: {
       'message': 'Product created successfully',
       'product': product,
+      'status': HttpStatus.created,
     },
   );
 }
