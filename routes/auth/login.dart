@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:server/repository/authRepository.dart';
+import 'package:server/repository/auth_repository.dart';
 
 class SignInBody {
   SignInBody({required this.email, required this.password});

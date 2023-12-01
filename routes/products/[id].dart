@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 
 import 'package:server/models/product.dart';
-import 'package:server/repository/productRepository.dart';
+import 'package:server/repository/product_repository.dart';
 
 Future<Response> onRequest(
   RequestContext context,
