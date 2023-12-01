@@ -10,7 +10,11 @@
 
 A Sample Backend Dart Api That includes
 
-- [x] MySql ✔️  
+- Auth Repo
+- User Repo
+- Product Repo
+
+- [x] MySql Connection ✔️  
 - [x] JWT ✔️
 - [x] Auth Login | Register ✔️
 - [x] User ✔️
