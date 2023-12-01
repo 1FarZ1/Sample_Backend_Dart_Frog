@@ -1,16 +1,22 @@
 // ignore_for_file: public_member_api_docs
 
-import '../models/product.dart';
+import 'package:server/db/sql_client.dart';
+import 'package:server/models/product.dart';
 
 class ProductRepository {
   factory ProductRepository() {
     return _instance;
   }
 
-  ProductRepository._privateConstructor();
+  ProductRepository._privateConstructor(
+    this.sqlClient,
+  );
+  SqlClient sqlClient;
 
   static final ProductRepository _instance =
-      ProductRepository._privateConstructor();
+      ProductRepository._privateConstructor(
+    SqlClient(),
+  );
 
   //singleton
 
@@ -53,23 +59,23 @@ class ProductRepository {
     String? search,
   }) async {
     final resultProducts = <Product>[];
+
+    final result =  await sqlClient.execute('SELECT * FROM products');
+    print(result);
     if (search != null) {
       for (final p in _products) {
         if (p.description.toLowerCase().contains(search.toLowerCase()) ||
             p.name.toLowerCase().contains(search.toLowerCase())) {
           resultProducts.add(p);
         }
-        
       }
-    }
-    else{
+    } else {
       resultProducts.addAll(_products);
     }
 
-   
     final startIndex = page! * limit!;
     final endIndex = startIndex + limit;
-    
+
     return resultProducts.sublist(
       startIndex,
       endIndex > resultProducts.length ? resultProducts.length : endIndex,

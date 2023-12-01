@@ -11,7 +11,7 @@ class UserRepository {
 
   static final UserRepository _instance = UserRepository._privateConstructor();
 
-  Future<User> getUser() async {
+  Future<User> getUser(String token) async {
     return User(
       email: 'f',
       password: 'bek',

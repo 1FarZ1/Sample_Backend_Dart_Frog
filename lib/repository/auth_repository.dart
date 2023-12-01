@@ -5,8 +5,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:server/repository/sql_client.dart';
+import 'package:server/db/sql_client.dart';
 
 import 'package:server/models/user.dart';
 
