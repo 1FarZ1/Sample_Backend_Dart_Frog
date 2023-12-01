@@ -16,8 +16,8 @@ A Sample Backend Dart Api That includes
 - [x] JWT ✔️
 - [x] Auth Login | Register ✔️
 - [x] User ✔️
-- [x] User Profile ✖️
-- [x] User Favorites ✖️
+- [ ] User Profile ✖️
+- [ ] User Favorites ✖️
 - [x] Get Products  With Pagination and search ✔️
 - [x] Get Product By Id ✔️
 - [x] Add Product ✔️
@@ -26,11 +26,11 @@ A Sample Backend Dart Api That includes
 - [x] and Others ....
 
 # TODO 
-- [] Add secrets To Env
-- [] Add the rest of functionalities
-- [] Create Controllers to Get Better Seperation of Concers
-- [] Add some security rules
-- [] Error Handling some side Cases
+- [ ] Add secrets To Env
+- [ ] Add the rest of functionalities
+- [ ] Create Controllers to Get Better Seperation of Concers
+- [ ] Add some security rules
+- [ ] Error Handling some side Cases
 # Note
 ### This Repository is for learning purposes only
 
