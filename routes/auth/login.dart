@@ -27,15 +27,23 @@ Future<Response> onRequest(RequestContext context) async {
   final body = await context.request.json() as Map<String, dynamic>;
 
   final signInBody = SignInBody.fromJson(body);
-  late final token;
-    token = await authRepo.login(signInBody.email, signInBody.password);
-  
+  if (signInBody.email.isEmpty || signInBody.password.isEmpty) {
+    return Response(body: 'Please Provide All fields', statusCode: 401);
+  }
+  late final String? token;
+  token = await authRepo.login(signInBody.email, signInBody.password);
 
   if (token == null) {
     return Response(body: 'Invalid credentials', statusCode: 401);
   }
 
-  return Response.json(body: {'token': token});
+  return Response.json(
+    body: {
+      'message': 'User Logged in successfully',
+      'status': 201,
+      'token': token,
+    },
+  );
 
   // return Response.json(body: SignInBody.fromJson(body));
   // return Response(body: 'This is a Login route!');
