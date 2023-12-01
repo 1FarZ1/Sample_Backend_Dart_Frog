@@ -5,7 +5,10 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:server/repository/sql_client.dart';
+
+import 'package:server/models/user.dart';
 
 // final _users = [
 //   User(email: 'f_bekkouche@estin.dz', password: 'mrfares77'),
@@ -31,10 +34,7 @@ class AuthRepository {
     sqlClient: SqlClient(),
   );
 
-  Future<String?> login(String email, String password) async {
-
-
-    
+  Future<User?> login(String email, String password) async {
     final result = await sqlClient.execute(
       'SELECT * FROM users WHERE email = :email AND password = :password',
       params: {
@@ -47,7 +47,9 @@ class AuthRepository {
 
     if (result.rows.isEmpty) return null;
 
-    return 'token';
+    return User.fromAssoc(
+      result.rows.first.assoc(),
+    );
   }
 
   Future<bool> register(
@@ -61,7 +63,7 @@ class AuthRepository {
 
     final result = await sqlClient.execute(
       'INSERT INTO users (email, password, name, image) VALUES (:email, :password, :name, :image)',
-      params: { 
+      params: {
         'email': email,
         'password': digest.toString(),
         'name': name,
@@ -74,3 +76,4 @@ class AuthRepository {
     return true;
   }
 }
+

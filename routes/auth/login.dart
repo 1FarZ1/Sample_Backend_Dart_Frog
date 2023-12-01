@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:server/models/user.dart';
 import 'package:server/repository/auth_repository.dart';
 
 class SignInBody {
@@ -38,19 +40,39 @@ Future<Response> _onPost(
     );
   }
 
-  final token = await authRepo.login(signInBody.email, signInBody.password);
-  if (token == null) {
+  final user = await authRepo.login(signInBody.email, signInBody.password);
+  if (user == null) {
     return Response(
       body: 'Invalid credentials',
       statusCode: HttpStatus.badRequest,
     );
   }
 
+  final token = generateToken(
+    username: signInBody.email,
+    user: user,
+  );
+
   return Response.json(
     body: {
       'message': 'User Logged in successfully',
-      'status': 201,
+      'status': HttpStatus.ok,
       'token': token,
     },
   );
+}
+
+String generateToken({
+  required String username,
+  required User user,
+}) {
+  final jwt = JWT(
+    {
+      'email': user.email,
+      'name': user.name,
+      'username': username,
+    },
+  );
+
+  return jwt.sign(SecretKey('123'));
 }
