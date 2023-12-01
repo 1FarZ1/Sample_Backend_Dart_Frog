@@ -65,9 +65,11 @@ class ProductRepository {
     else{
       resultProducts.addAll(_products);
     }
+
+   
     final startIndex = page! * limit!;
     final endIndex = startIndex + limit;
-
+    
     return resultProducts.sublist(
       startIndex,
       endIndex > resultProducts.length ? resultProducts.length : endIndex,
