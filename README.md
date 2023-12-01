@@ -4,6 +4,10 @@
 [![License: MIT][license_badge]][license_link]
 [![Powered by Dart Frog](https://img.shields.io/endpoint?url=https://tinyurl.com/dartfrog-badge)](https://dartfrog.vgv.dev)
 
+### So Dart Frog stable release is out and i decided to make a sample backend with it
+
+### since im very comfortable with dart and i love the eco system of it
+
 A Sample Backend Dart Api That includes
 
 - [x] MySql ✔️  
@@ -19,7 +23,9 @@ A Sample Backend Dart Api That includes
 - [x] Delete Product ✔️
 - [x] and Others ....
 
-## This Repository is for learning purposes only
+# Note
+
+### This Repository is for learning purposes only
 
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
