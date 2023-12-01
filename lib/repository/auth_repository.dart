@@ -35,11 +35,15 @@ class AuthRepository {
   );
 
   Future<User?> login(String email, String password) async {
+    // convert password
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+
     final result = await sqlClient.execute(
       'SELECT * FROM users WHERE email = :email AND password = :password',
       params: {
         'email': email,
-        'password': password,
+        'password': digest.toString(),
       },
     );
 
@@ -58,6 +62,17 @@ class AuthRepository {
     String name, {
     String? image,
   }) async {
+    // check if user exists
+    final isUserExist = await sqlClient.execute(
+      'SELECT * FROM users WHERE email = :email',
+      params: {
+        'email': email,
+      },
+    );
+
+    // print('isUserExist: ${isUserExist.numOfRows}');
+    if (isUserExist.rows.isNotEmpty) return false;
+
     final bytes = utf8.encode(password);
     final digest = sha256.convert(bytes);
 
@@ -70,10 +85,6 @@ class AuthRepository {
         'image': image,
       },
     );
-    // if (result.rows.isEmpty) return false;
-
-    // _users.add(User(email: email, password: password));
     return true;
   }
 }
-

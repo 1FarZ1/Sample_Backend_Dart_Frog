@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:server/repository/auth_repository.dart';
+import './login.dart';
 
 class SignUpBody {
   SignUpBody({
@@ -40,7 +41,7 @@ Future<Response> onRequest(RequestContext context) async {
 Future<Response> _onPost(
   RequestContext context,
 ) async {
-   final authRepo = context.read<AuthRepository>();
+  final authRepo = context.read<AuthRepository>();
   final body = await context.request.json() as Map<String, dynamic>;
   final signUpBody = SignUpBody.fromJson(body);
   if (signUpBody.email.isEmpty ||
@@ -58,14 +59,27 @@ Future<Response> _onPost(
     signUpBody.name,
     image: signUpBody.image ?? '',
   );
+  // print isRegistered;
+  print('isRegistered: $isRegistered');
   if (!isRegistered) {
+    return Response(
+      body: 'User already exists',
+      statusCode: HttpStatus.badRequest,
+    );
+  }
+
+  final user = await authRepo.login(signUpBody.email, signUpBody.password);
+  if (user == null) {
     return Response(
       body: 'Invalid credentials',
       statusCode: HttpStatus.badRequest,
     );
   }
+  final token = generateToken(
+    username: signUpBody.email,
+    user: user,
+  );
 
-  final token = await authRepo.login(signUpBody.email, signUpBody.password);
   return Response.json(
     body: {
       'message': 'User Registered successfully',
