@@ -18,8 +18,6 @@ class ProductRepository {
     SqlClient(),
   );
 
-  //singleton
-
   Future<List<Product>> fetchProducts({
     int? page = 0,
     int? limit = 2,
@@ -62,33 +60,55 @@ class ProductRepository {
     return Product.fromAssoc(result.rows.first.assoc());
   }
 
-  Future<Product> createProduct(Product product) async {
-    return product;
+  Future<Product?> createProduct(Product product) async {
+    const query = '''
+      INSERT INTO product (name, description, price, image , category,brand,stock,rating)
+      VALUES (:name, :description, :price, :image, :category, :brand, :stock, :rating)
+    ''';
+
+    final result = await sqlClient.execute(
+      query,
+      params: {
+        'name': product.name,
+        'description': product.description,
+        'price': product.price,
+        'image': product.image,
+        'category': product.category,
+        'brand': product.brand,
+        'stock': product.stock,
+        'rating': product.rating,
+      },
+    );
+
+    if (result.rows.isEmpty) return null;
+
+    return Product.fromAssoc(result.rows.first.assoc());
   }
 
   Future<Product?> updateProduct(Product product) async {
-    // final index = _products.indexWhere((p) => p.id == product.id);
-    // if (index == -1) {
-    //   return null;
-    // }
-    // _products[index] = product;
-    // return product;
-
+  
     final result = await sqlClient.execute(
-      'UPDATE product SET name = :name, description = :description, price = :price, image = :image WHERE id = :id',
+      'UPDATE product SET name = :name, description = :description, price = :price, image = :image category = ,:category, brand = ,:brand, stock = ,:stock, rating = ,:rating  WHERE id = :id',
       params: {
         'id': product.id,
         'name': product.name,
         'description': product.description,
         'price': product.price,
         'image': product.image,
+        'category': product.category,
+        'brand': product.brand,
+        'stock': product.stock,
+        'rating': product.rating,
+
       },
     );
-    return null;
+    
+    if (result.rows.isEmpty) return null;
+
+    return Product.fromAssoc(result.rows.first.assoc());
   }
 
   Future<bool> deleteProduct(int id) async {
-    // _products.removeWhere((p) => p.id == id);
 
     return sqlClient.execute(
       'DELETE FROM product WHERE id = :id',

@@ -23,7 +23,6 @@ class AuthRepository {
   );
 
   Future<User?> login(String email, String password) async {
-    // convert password
     final bytes = utf8.encode(password);
     final digest = sha256.convert(bytes);
 
@@ -50,7 +49,6 @@ class AuthRepository {
     String name, {
     String? image,
   }) async {
-    // check if user exists
     final isUserExist = await sqlClient.execute(
       'SELECT * FROM users WHERE email = :email',
       params: {
@@ -58,7 +56,6 @@ class AuthRepository {
       },
     );
 
-    // print('isUserExist: ${isUserExist.numOfRows}');
     if (isUserExist.rows.isNotEmpty) return false;
 
     final bytes = utf8.encode(password);
