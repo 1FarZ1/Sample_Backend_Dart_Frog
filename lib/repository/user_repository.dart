@@ -1,10 +1,7 @@
 // ignore_for_file: public_member_api_docs
-
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:logger/logger.dart';
-import 'package:server/models/user.dart';
-
 import 'package:server/db/sql_client.dart';
+import 'package:server/models/user.dart';
 
 class UserRepository {
   // singleton

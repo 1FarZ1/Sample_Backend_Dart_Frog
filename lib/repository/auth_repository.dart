@@ -70,6 +70,9 @@ class AuthRepository {
         'image': image,
       },
     );
+
+    if (result.rows.isEmpty) return false;
+    
     
     return true;
   }

@@ -27,8 +27,10 @@ class ProductRepository {
 
     final result = await sqlClient.execute('SELECT * FROM product');
 
-    final products =
-        result.rows.map((e) => Product.fromAssoc(e.assoc())).toList();
+    final products = result.rows.map((e) {
+      print(e.assoc()['id'].runtimeType);
+      return Product.fromAssoc(e.assoc());
+    }).toList();
     if (search != null) {
       for (final p in products) {
         if (p.description.toLowerCase().contains(search.toLowerCase()) ||
@@ -86,7 +88,6 @@ class ProductRepository {
   }
 
   Future<Product?> updateProduct(Product product) async {
-  
     final result = await sqlClient.execute(
       'UPDATE product SET name = :name, description = :description, price = :price, image = :image category = ,:category, brand = ,:brand, stock = ,:stock, rating = ,:rating  WHERE id = :id',
       params: {
@@ -99,17 +100,15 @@ class ProductRepository {
         'brand': product.brand,
         'stock': product.stock,
         'rating': product.rating,
-
       },
     );
-    
+
     if (result.rows.isEmpty) return null;
 
     return Product.fromAssoc(result.rows.first.assoc());
   }
 
   Future<bool> deleteProduct(int id) async {
-
     return sqlClient.execute(
       'DELETE FROM product WHERE id = :id',
       params: {

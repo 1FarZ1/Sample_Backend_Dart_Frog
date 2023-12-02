@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 class Product {
   Product({
     required this.id,
@@ -24,14 +26,14 @@ class Product {
         category = json['category'] as String;
   // from assoc
   Product.fromAssoc(Map<String, dynamic> assoc)
-      : id = assoc['id'] as int,
+      : id = int.parse(assoc['id'] as String),
         name = assoc['name'] as String,
         description = assoc['description'] as String,
-        price = assoc['price'] as double,
-        rating = assoc['rating'] as double,
+        price =  double.parse(assoc['price'] as String),
+        rating = double.parse(assoc['rating'] as String),
         image = assoc['image'] as String,
         brand = assoc['brand'] as String,
-        stock = assoc['stock'] as int,
+        stock = int.parse(assoc['stock'] as String),
         category = assoc['category'] as String;
   int id;
   String name;
