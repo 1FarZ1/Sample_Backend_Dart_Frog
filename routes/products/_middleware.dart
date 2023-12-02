@@ -10,7 +10,7 @@ Handler middleware(Handler handler) {
       authenticator: (context, token) async {
         return context.read<UserRepository>().getUser(token);
       },
-    ),
+  ),
   ).use(provider((context) => ProductRepository()));
 
   // return handler;
